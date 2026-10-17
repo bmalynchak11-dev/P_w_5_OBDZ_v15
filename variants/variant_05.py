@@ -1,13 +1,21 @@
-"""Задача 5. LEFT JOIN і підрахунок без розмноження.
-
-Опис і умови: student.md, розділ «Опис задач», задача 5; картка вашого варіанта.
-Відкриті тести: pytest -k "T05"
+"""
+Задача 5. LEFT JOIN і підрахунок без розмноження
+Варіант 15: Фітнес-клуб (набір 3)
 """
 
-# Впишіть номер свого варіанта (13-15).
-VARIANT = 0
+VARIANT = 15
 
 
 def query() -> str:
-    """Повертає текст одного запиту SELECT (без зайвих команд)."""
-    raise NotImplementedError  # TODO: реалізуйте за карткою варіанта
+    return """
+    SELECT
+        h.name,
+        count(DISTINCT w.id) AS items,
+        count(b.id) AS links,
+        coalesce(sum(b.places), 0) AS total_qty
+    FROM hall h
+    LEFT JOIN workout w ON w.hall_id = h.id
+    LEFT JOIN booking b ON b.workout_id = w.id
+    GROUP BY h.id, h.name
+    ORDER BY links DESC, h.id ASC;
+    """
